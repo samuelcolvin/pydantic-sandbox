@@ -1,0 +1,54 @@
+---
+name: 🚀 Feature request
+about: Suggest a new feature or change to pydantic
+title: '[FEATURE]: '
+labels: feature request
+issue_body: false
+
+inputs:
+- type: input
+  attributes:
+    label: Discussion Thread
+    description: >
+      Before creating a feature request you (or someone else) must create a
+      [discussion thread](https://github.com/samuelcolvin/pydantic/discussions) in github discussions and see wider
+      support for the feature.
+  validations:
+    required: true
+
+- type: dropdown
+  attributes:
+    label: After submitting this, I commit to do one of the following.
+    options:
+      - Look through open issues/discussions and helped at least one other person
+      - Hit "watch" and help at least 2 people that ask questions in the future
+      - Implement a Pull Request for a confirmed bug
+  validations:
+    required: true
+
+- type: markdown
+  attributes:
+    label: OS, Python & Pydantic Version
+    description: Output of `python -c "import pydantic.utils; print(pydantic.utils.version_info())"`
+  validations:
+    required: true
+
+- type: markdown
+  attributes:
+    label: Description
+    description: Description of the feature you want (shorter the better)
+  validations:
+    required: true
+
+- type: markdown
+  attributes:
+    label: Self-Contained Code Snippet
+    description: Where possible please include a self-contained code snippet describing your feature request
+    value: |
+      ```py
+      import pydantic
+
+      ...
+      ```
+  validations:
+    required: false
