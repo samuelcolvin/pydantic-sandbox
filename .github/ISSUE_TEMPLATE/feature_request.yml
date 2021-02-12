@@ -5,7 +5,7 @@ title: '[FEATURE]: '
 labels: feature request
 issue_body: false
 
-inputs:
+body:
 - type: input
   attributes:
     label: Discussion Thread
@@ -18,7 +18,7 @@ inputs:
 
 - type: dropdown
   attributes:
-    label: After submitting this, I commit to do one of the following.
+    label: After submitting this, I commit to do one of the following
     options:
       - Look through open issues/discussions and helped at least one other person
       - Hit "watch" and help at least 2 people that ask questions in the future
@@ -28,8 +28,9 @@ inputs:
 
 - type: markdown
   attributes:
-    label: OS, Python & Pydantic Version
-    description: Output of `python -c "import pydantic.utils; print(pydantic.utils.version_info())"`
+    label: "OS, Python & Pydantic Version"
+    description: >
+      Output of `python -c "import pydantic.utils; print(pydantic.utils.version_info())"`
   validations:
     required: true
 
@@ -52,4 +53,4 @@ inputs:
       ```
   validations:
     required: false
-
+...
