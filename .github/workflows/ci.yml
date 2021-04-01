@@ -9,14 +9,9 @@ jobs:
       - run: python -V
       - run: python -m pip install -U httpie
 
-      - run: |
+      - name: http
+        run: |
           echo $TOKEN | wc
-          http -p hbHB https://api.github.com/repos/samuelcolvin/pydantic-sandbox/releases/latest "Authorization:bearer $TOKEN"
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - run: |
-          echo $TOKEN | wc
-          http -p hbHB https://api.github.com/repos/samuelcolvin/pydantic/releases/latest "Authorization:bearer $TOKEN"
+          http -p hbHB https://api.github.com/user "Authorization:bearer $TOKEN" "Accept:application/vnd.github.v3+json"
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
