@@ -10,17 +10,11 @@ jobs:
       - run: python -m pip install -U httpie
 
       - run: |
-          http -p hbHB GET https://api.github.com/user "Authorization:bearer $TOKEN" "Accept:application/vnd.github.v3+json"
-          echo $TOKEN | wc
+          http POST https://api.github.com/repos/samuelcolvin/pydantic-sandbox "Authorization:bearer $TOKEN" "Accept:application/vnd.github.v3+json"
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
-          curl https://api.github.com/user -H "Authorization:bearer $TOKEN" -H "Accept:application/vnd.github.v3+json"
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - run: |
-          python -c 'import os;print("".join(reversed(os.environ["TOKEN"])))'
+          http POST https://api.github.com/repos/samuelcolvin/smokeshow "Authorization:bearer $TOKEN" "Accept:application/vnd.github.v3+json"
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
