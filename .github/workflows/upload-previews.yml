@@ -17,13 +17,12 @@ jobs:
         with:
           python-version: '3.8'
 
-      - run: pip install coverage smokeshow
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
-      - name: get coverage files
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage
-          path: coverage
+      - run: pip install coverage smokeshow
 
       - name: get coverage files
         uses: dawidd6/action-download-artifact@v2
