@@ -6,16 +6,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: python -m pip install httpie
+      - run: python -V
+      - run: python -m pip install -U httpie
 
       - run: |
           echo $TOKEN | wc
-          http https://api.github.com/repos/samuelcolvin/pydantic-sandbox/releases/latest "Authorization:bearer $TOKEN"
+          http -p hbHB https://api.github.com/repos/samuelcolvin/pydantic-sandbox/releases/latest "Authorization:bearer $TOKEN"
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
           echo $TOKEN | wc
-          http https://api.github.com/repos/samuelcolvin/pydantic/releases/latest "Authorization:bearer $TOKEN"
+          http -p hbHB https://api.github.com/repos/samuelcolvin/pydantic/releases/latest "Authorization:bearer $TOKEN"
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
