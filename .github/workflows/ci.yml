@@ -10,21 +10,21 @@ jobs:
       - run: python -m pip install -U httpie
 
       - run: >
-          http https://api.github.com/repos/$GITHUB_REPOSITORY
+          http -p hbHB https://api.github.com/repos/$GITHUB_REPOSITORY
           "Authorization:bearer $TOKEN"
           "Accept:application/vnd.github.v3+json"
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: >
-          http POST https://api.github.com/repos/$GITHUB_REPOSITORY/issues
+          http -p hbHB https://api.github.com/repos/$GITHUB_REPOSITORY/issues
           "Authorization:bearer $TOKEN"
           "Accept:application/vnd.github.v3+json"
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: >
-          http POST https://api.github.com/repos/samuelcolvin/smokeshow/issues
+          http -p hbHB https://api.github.com/repos/samuelcolvin/smokeshow/issues
           "Authorization:bearer $TOKEN"
           "Accept:application/vnd.github.v3+json"
         env:
