@@ -17,14 +17,14 @@ jobs:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: >
-          http -p hbHB https://api.github.com/repos/$GITHUB_REPOSITORY/issues
+          http -p hbHB GET https://api.github.com/repos/$GITHUB_REPOSITORY/issues
           "Authorization:bearer $TOKEN"
           "Accept:application/vnd.github.v3+json"
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: >
-          http -p hbHB https://api.github.com/repos/samuelcolvin/smokeshow/issues
+          http -p hbHB GET https://api.github.com/repos/samuelcolvin/smokeshow/issues
           "Authorization:bearer $TOKEN"
           "Accept:application/vnd.github.v3+json"
         env:
