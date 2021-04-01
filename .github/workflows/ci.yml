@@ -1,12 +1,4 @@
-name: CI
-
-on:
-  push:
-    branches:
-      - master
-    tags:
-      - '**'
-  pull_request: {}
+on: push
 
 jobs:
   experiment:
@@ -15,7 +7,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: |
-          curl https://api.github.com/repos/samuelcolvin/pydantic -H "Authorization: bearer $TOKEN"
+      - run: 'curl https://api.github.com/repos/samuelcolvin/pydantic -H "Authorization: bearer $TOKEN"'
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
