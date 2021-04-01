@@ -1,0 +1,62 @@
+name: Upload Previews
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+jobs:
+  coverage-upload:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+
+      - run: pip install coverage smokeshow
+
+      - name: get coverage files
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage
+          path: coverage
+
+      - name: get coverage files
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ci.yml
+          commit: ${{github.event.pull_request.head.sha}}
+          name: coverage
+          path: coverage
+
+      - run: ls -la
+      - run: coverage combine coverage
+      - run: coverage report
+      - run: coverage html --show-contexts
+
+      - run: smokeshow upload htmlcov
+        env:
+          SMOKESHOW_GITHUB_STATUS_DESCRIPTION: Coverage {coverage-percentage}
+          SMOKESHOW_GITHUB_COVERAGE_THRESHOLD: 100
+          SMOKESHOW_GITHUB_CONTEXT: coverage
+          SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+
+      - name: get docs site
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: ci.yml
+          commit: ${{github.event.pull_request.head.sha}}
+          name: docs
+          path: site
+
+      - run: smokeshow upload site
+        env:
+          SMOKESHOW_GITHUB_STATUS_DESCRIPTION: Docs Preview
+          SMOKESHOW_GITHUB_CONTEXT: docs
+          SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
