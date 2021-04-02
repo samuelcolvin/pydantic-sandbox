@@ -22,13 +22,22 @@ jobs:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
 
+      - run: |
+          echo "github.event.pull_request.head.sha: $pr_sha"
+          echo "github.sha: $gh_sha"
+          echo "either: $either"
+        env:
+          pr_sha: ${{ github.event.pull_request.head.sha }}
+          gh_sha: ${{ github.sha }}
+          either: ${{ github.event.pull_request.head.sha || github.sha }}
+
       - run: pip install coverage smokeshow
 
       - name: get coverage files
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: ci.yml
-          commit: ${{ github.event.pull_request.head.sha }}
+          commit: ${{ github.event.pull_request.head.sha || github.sha }}
           name: coverage
           path: coverage
 
@@ -43,13 +52,13 @@ jobs:
           SMOKESHOW_GITHUB_COVERAGE_THRESHOLD: 100
           SMOKESHOW_GITHUB_CONTEXT: coverage
           SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: get docs site
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: ci.yml
-          commit: ${{ github.event.pull_request.head.sha }}
+          commit: ${{ github.event.pull_request.head.sha || github.sha }}
           name: docs
           path: site
 
@@ -58,4 +67,4 @@ jobs:
           SMOKESHOW_GITHUB_STATUS_DESCRIPTION: Docs Preview
           SMOKESHOW_GITHUB_CONTEXT: docs
           SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
