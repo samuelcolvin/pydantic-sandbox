@@ -5,7 +5,8 @@ for i in range(10):
 
 print('finished')
 
+last_bit = False
 
-if False:
+if last_bit:
     x = 4 ** 8
     print('4 ** 8:', x)

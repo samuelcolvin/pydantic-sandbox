@@ -40,7 +40,7 @@ jobs:
 
     - run: mkdir coverage
 
-    - run: coverage run ../pydantic-sandbox/demo.py
+    - run: coverage run demo.py
       env:
         COVERAGE_FILE: coverage/.coverage.linux-testing
         CONTEXT: linux-py3.8-testing
