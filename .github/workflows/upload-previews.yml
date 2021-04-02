@@ -5,12 +5,9 @@ on:
     workflows: [CI]
     types: [completed]
 
-env:
-  sha: ${{ github.event.workflow_run.head_sha }}
-
 jobs:
   coverage-upload:
-    name: coverage upload for ${{ env.sha }}
+    name: coverage upload for ${{ github.event.workflow_run.head_sha }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
@@ -29,11 +26,11 @@ jobs:
 #      - run: |
 #          echo "github.event.pull_request.head.sha: $pr_sha"
 #          echo "github.sha: $gh_sha"
-#          echo "env.sha: $env_sha"
+#          echo "github.event.workflow_run.head_sha: $env_sha"
 #        env:
 #          pr_sha: ${{ github.event.pull_request.head.sha }}
 #          gh_sha: ${{ github.sha }}
-#          env_sha: ${{ env.sha }}
+#          env_sha: ${{ github.event.workflow_run.head_sha }}
 
       - run: pip install coverage smokeshow
 
@@ -41,7 +38,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: ci.yml
-          commit: ${{ env.sha }}
+          commit: ${{ github.event.workflow_run.head_sha }}
           name: coverage
           path: coverage
 
@@ -55,10 +52,10 @@ jobs:
           SMOKESHOW_GITHUB_COVERAGE_THRESHOLD: 100
           SMOKESHOW_GITHUB_CONTEXT: coverage
           SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ env.sha }}
+          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
 
   docs-upload:
-    name: docs upload for ${{ env.sha }}
+    name: docs upload for ${{ github.event.workflow_run.head_sha }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
@@ -75,7 +72,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: ci.yml
-          commit: ${{ env.sha }}
+          commit: ${{ github.event.workflow_run.head_sha }}
           name: docs
           path: site
 
@@ -84,4 +81,4 @@ jobs:
           SMOKESHOW_GITHUB_STATUS_DESCRIPTION: Docs Preview
           SMOKESHOW_GITHUB_CONTEXT: docs
           SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ env.sha }}
+          SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
