@@ -56,6 +56,7 @@ jobs:
           SMOKESHOW_GITHUB_CONTEXT: coverage
           SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          SMOKESHOW_AUTH_KEY: ${{ secrets.SMOKESHOW_AUTH_KEY }}
 
   docs-upload:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -88,3 +89,4 @@ jobs:
           SMOKESHOW_GITHUB_CONTEXT: docs
           SMOKESHOW_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SMOKESHOW_GITHUB_PR_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          SMOKESHOW_AUTH_KEY: ${{ secrets.SMOKESHOW_AUTH_KEY }}
