@@ -11,43 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: 'echo "commit sha: $sha"'
-        env:
-          sha: ${{ github.event.workflow_run.head_sha }}
-
-      - uses: actions/checkout@v2
-
       - uses: actions/setup-python@v1
         with:
           python-version: '3.8'
 
-#      - name: Dump GitHub context
-#        run: 'echo "GITHUB_CONTEXT: $GITHUB_CONTEXT"'
-#        env:
-#          GITHUB_CONTEXT: ${{ toJSON(github) }}
-#
-#      - run: |
-#          echo "github.event.pull_request.head.sha: $pr_sha"
-#          echo "github.sha: $gh_sha"
-#          echo "github.event.workflow_run.head_sha: $env_sha"
-#        env:
-#          pr_sha: ${{ github.event.pull_request.head.sha }}
-#          gh_sha: ${{ github.sha }}
-#          env_sha: ${{ github.event.workflow_run.head_sha }}
+      - run: pip install smokeshow
 
-      - run: pip install coverage smokeshow
-
-      - name: get coverage files
+      - name: get coverage html
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: ci.yml
           commit: ${{ github.event.workflow_run.head_sha }}
-          name: coverage
-          path: coverage
-
-      - run: coverage combine coverage
-      - run: coverage report
-      - run: coverage html --show-contexts
+          name: coverage-html
+          path: htmlcov
 
       - run: smokeshow upload htmlcov
         env:
@@ -63,12 +39,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: 'echo "commit sha: $sha"'
-        env:
-          sha: ${{ github.event.workflow_run.head_sha }}
-
-      - uses: actions/checkout@v2
-
       - uses: actions/setup-python@v1
         with:
           python-version: '3.8'
