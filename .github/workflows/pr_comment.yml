@@ -1,6 +1,7 @@
+name: Assign Pull Requests
+
 on:
-  pull_request_target:
-    types: [assigned, unassigned, labeled, unlabeled, opened, edited, closed, reopened, synchronize, ready_for_review, locked, unlocked, review_requested, review_request_removed]
+  pull_request_target: {}
   issue_comment: {}
 
 jobs:
@@ -11,7 +12,7 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - name: Dump job context
-        env:
-          JOB_CONTEXT: ${{ toJSON(job) }}
-        run: echo "$JOB_CONTEXT"
+
+      - run: echo "$GITHUB_EVENT_PATH"
+      - run: cat "$GITHUB_EVENT_PATH"
+      - run: python3 -m json.tool "$GITHUB_EVENT_PATH"
