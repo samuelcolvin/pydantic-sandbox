@@ -1,9 +1,9 @@
 import logging
 import sys
-from typing import Optional, Literal
+from typing import Optional, Tuple
 
 from github import Github
-from pydantic import BaseModel, BaseSettings, SecretStr, FilePath
+from pydantic import BaseModel, BaseSettings, SecretStr, FilePath, ValidationError
 
 
 class Settings(BaseSettings):
@@ -11,6 +11,11 @@ class Settings(BaseSettings):
     github_event_path: FilePath
     github_event_name: Optional[str] = None
     input_token: SecretStr
+    reviewers: Tuple[str, ...] = ('samuelcolvin',)
+    request_update_trigger: str = 'please update'
+    request_review_trigger: str = 'please review'
+    awaiting_update_label: str = 'awaiting author updates'
+    awaiting_review_label: str = 'awaiting review'
 
 
 class User(BaseModel):
@@ -39,9 +44,13 @@ class GitHubEvent(BaseModel):
 
 logging.basicConfig(level=logging.INFO)
 
-settings = Settings()
+try:
+    s = Settings()
+except ValidationError as e:
+    logging.error('error loading Settings\n:%s', e)
+    sys.exit(1)
 
-contents = settings.github_event_path.read_text()
+contents = s.github_event_path.read_text()
 event = GitHubEvent.parse_raw(contents)
 
 if event.issue.pull_request is None:
@@ -50,15 +59,11 @@ if event.issue.pull_request is None:
 
 body = event.comment.body.lower()
 
-assigned_author_trigger = 'assign author'
-request_review_trigger = 'request review'
-
-g = Github(settings.input_token.get_secret_value())
-repo = g.get_repo(settings.github_repository)
+g = Github(s.input_token.get_secret_value())
+repo = g.get_repo(s.github_repository)
 pr = repo.get_pull(event.issue.number)
-reviewers = ('samuelcolvin',)
-awaiting_author_label = 'awaiting author revision'
-awaiting_review_label = 'awaiting review'
+commenter_is_reviewer = event.comment.user.login not in s.reviewers
+commenter_is_author = event.issue.user.login == event.comment.user.login
 
 
 def remove_label(label: str):
@@ -67,45 +72,44 @@ def remove_label(label: str):
         pr.remove_from_labels(label)
 
 
-def assigned_author() -> Optional[str]:
-    if event.comment.user.login in reviewers:
-        return f'Only reviews {reviewers} can re-assign the author, not {event.comment.user.login}'
-    pr.add_to_labels(awaiting_author_label)
-    remove_label(awaiting_review_label)
+def assigned_author() -> Tuple[bool, str]:
+    if commenter_is_reviewer:
+        return False, f'Only reviews {s.reviewers} can re-assign the author, not {event.comment.user.login}'
+    pr.add_to_labels(s.awaiting_update_label)
+    remove_label(s.awaiting_review_label)
     pr.add_to_assignees(event.issue.user.login)
-    to_remove = [r for r in reviewers if r != event.issue.user.login]
+    to_remove = [r for r in s.reviewers if r != event.issue.user.login]
     if to_remove:
         pr.remove_from_assignees(*to_remove)
-    logging.info(
-        'author %s successfully assigned to PR and "%s" label added', event.issue.user.login, awaiting_author_label
-    )
+    return True, f'author {event.issue.user.login} successfully assigned to PR, "{s.awaiting_update_label}" label added'
 
 
-def request_review() -> Optional[str]:
-    if event.issue.user.login != event.comment.user.login:
-        return f'Only the PR author {event.issue.user.login} can request a review, not {event.comment.user.login}'
-    pr.add_to_labels(awaiting_review_label)
-    remove_label(awaiting_author_label)
-    pr.add_to_assignees(*reviewers)
-    if event.issue.user.login not in reviewers:
+def request_review() -> Tuple[bool, str]:
+    if not (commenter_is_reviewer or commenter_is_author):
+        return False, (
+            f'Only the PR author {event.issue.user.login} or reviews can request a review, '
+            f'not {event.comment.user.login}'
+        )
+    pr.add_to_labels(s.awaiting_review_label)
+    remove_label(s.awaiting_update_label)
+    pr.add_to_assignees(*s.reviewers)
+    if event.issue.user.login not in s.reviewers:
         pr.remove_from_assignees(event.issue.user.login)
-    logging.info(
-        'reviews %s successfully assigned to PR and "%s" label added', reviewers, awaiting_review_label
-    )
+    return True, f'reviews {s.reviewers} successfully assigned to PR, "{s.awaiting_review_label}" label added'
 
 
-if assigned_author_trigger in body:
-    err = assigned_author()
-elif request_review_trigger in body:
-    err = request_review()
+if s.request_update_trigger in body:
+    success, msg = assigned_author()
+elif s.request_review_trigger in body:
+    success, msg = request_review()
 else:
-    logging.info(
-        'neither %r nor %r found in comment body, not proceeding',
-        assigned_author_trigger,
-        request_review_trigger,
+    success = True
+    msg = (
+        f'neither {s.request_update_trigger!r} nor {s.request_review_trigger!r} found in comment body, not proceeding'
     )
-    sys.exit(0)
 
-if err:
-    logging.warning('%s', err)
+if success:
+    logging.info('success: %s', msg)
+else:
+    logging.warning('warning: %s', msg)
     sys.exit(1)
