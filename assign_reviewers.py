@@ -18,7 +18,6 @@ class User(BaseModel):
 
 
 class Comment(BaseModel):
-    author_association: Literal['owner']
     body: str
     user: User
 
