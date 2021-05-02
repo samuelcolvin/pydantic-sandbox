@@ -57,13 +57,15 @@ g = Github(settings.input_token.get_secret_value())
 repo = g.get_repo(settings.github_repository)
 pr = repo.get_pull(event.issue.number)
 reviewers = ('samuelcolvin',)
+awaiting_author_label = 'awaiting author revision'
+awaiting_review_label = 'awaiting review'
 
 
 def assigned_author() -> Optional[str]:
     if event.comment.user.login in reviewers:
         return f'Only reviews {reviewers} can re-assign the author, not {event.comment.user.login}'
-    pr.add_to_labels('awaiting author revision')
-    pr.remove_from_labels('ready for review')
+    pr.add_to_labels(awaiting_author_label)
+    pr.remove_from_labels(awaiting_review_label)
     pr.add_to_assignees(event.issue.user.login)
     pr.remove_from_assignees(*reviewers)
 
@@ -71,8 +73,8 @@ def assigned_author() -> Optional[str]:
 def request_review() -> Optional[str]:
     if event.issue.user.login != event.comment.user.login:
         return f'Only the PR author {event.issue.user.login} can request a review, not {event.comment.user.login}'
-    pr.add_to_labels('ready for review')
-    pr.remove_from_labels('awaiting author revision')
+    pr.add_to_labels(awaiting_review_label)
+    pr.remove_from_labels(awaiting_author_label)
     pr.add_to_assignees(*reviewers)
     pr.remove_from_assignees(event.issue.user.login)
 
