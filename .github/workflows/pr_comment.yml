@@ -5,7 +5,7 @@ on:
     types: [created, edited]
 
 jobs:
-  one:
+  assign_reviewers:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,3 +19,5 @@ jobs:
       - run: pip install pydantic pygithub
 
       - run: python assign_reviewers.py
+        env:
+          input_token: ${{ secrets.GITHUB_TOKEN }}
