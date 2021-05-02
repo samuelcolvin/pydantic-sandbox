@@ -64,6 +64,7 @@ repo = g.get_repo(s.github_repository)
 pr = repo.get_pull(event.issue.number)
 commenter_is_reviewer = event.comment.user.login not in s.reviewers
 commenter_is_author = event.issue.user.login == event.comment.user.login
+reviewers = ', '.join(f'"{r}"' for r in s.reviewers)
 
 
 def remove_label(label: str):
@@ -74,20 +75,20 @@ def remove_label(label: str):
 
 def assigned_author() -> Tuple[bool, str]:
     if commenter_is_reviewer:
-        return False, f'Only reviews {s.reviewers} can re-assign the author, not {event.comment.user.login}'
+        return False, f'Only reviewers {reviewers} can assign the author, not {event.comment.user.login}'
     pr.add_to_labels(s.awaiting_update_label)
     remove_label(s.awaiting_review_label)
     pr.add_to_assignees(event.issue.user.login)
     to_remove = [r for r in s.reviewers if r != event.issue.user.login]
     if to_remove:
         pr.remove_from_assignees(*to_remove)
-    return True, f'author {event.issue.user.login} successfully assigned to PR, "{s.awaiting_update_label}" label added'
+    return True, f'Author {event.issue.user.login} successfully assigned to PR, "{s.awaiting_update_label}" label added'
 
 
 def request_review() -> Tuple[bool, str]:
     if not (commenter_is_reviewer or commenter_is_author):
         return False, (
-            f'Only the PR author {event.issue.user.login} or reviews can request a review, '
+            f'Only the PR author {event.issue.user.login} or reviewers can request a review, '
             f'not {event.comment.user.login}'
         )
     pr.add_to_labels(s.awaiting_review_label)
@@ -95,7 +96,7 @@ def request_review() -> Tuple[bool, str]:
     pr.add_to_assignees(*s.reviewers)
     if event.issue.user.login not in s.reviewers:
         pr.remove_from_assignees(event.issue.user.login)
-    return True, f'reviews {s.reviewers} successfully assigned to PR, "{s.awaiting_review_label}" label added'
+    return True, f'Reviewers {reviewers} successfully assigned to PR, "{s.awaiting_review_label}" label added'
 
 
 if s.request_update_trigger in body:
@@ -112,4 +113,3 @@ if success:
     logging.info('success: %s', msg)
 else:
     logging.warning('warning: %s', msg)
-    sys.exit(1)
