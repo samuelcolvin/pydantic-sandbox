@@ -62,7 +62,7 @@ body = event.comment.body.lower()
 g = Github(s.input_token.get_secret_value())
 repo = g.get_repo(s.github_repository)
 pr = repo.get_pull(event.issue.number)
-commenter_is_reviewer = event.comment.user.login not in s.reviewers
+commenter_is_reviewer = event.comment.user.login in s.reviewers
 commenter_is_author = event.issue.user.login == event.comment.user.login
 reviewers = ', '.join(f'"{r}"' for r in s.reviewers)
 
@@ -74,7 +74,7 @@ def remove_label(label: str):
 
 
 def assigned_author() -> Tuple[bool, str]:
-    if commenter_is_reviewer:
+    if not commenter_is_reviewer:
         return False, f'Only reviewers {reviewers} can assign the author, not {event.comment.user.login}'
     pr.add_to_labels(s.awaiting_update_label)
     remove_label(s.awaiting_review_label)
