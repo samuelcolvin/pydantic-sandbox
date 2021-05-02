@@ -74,6 +74,9 @@ def assigned_author() -> Optional[str]:
     remove_label(awaiting_review_label)
     pr.add_to_assignees(event.issue.user.login)
     pr.remove_from_assignees(*reviewers)
+    logging.info(
+        'author %s successfully assigned to PR and "%s" label added', event.issue.user.login, awaiting_author_label
+    )
 
 
 def request_review() -> Optional[str]:
@@ -83,6 +86,9 @@ def request_review() -> Optional[str]:
     remove_label(awaiting_author_label)
     pr.add_to_assignees(*reviewers)
     pr.remove_from_assignees(event.issue.user.login)
+    logging.info(
+        'reviews %s successfully assigned to PR and "%s" label added', reviewers, awaiting_review_label
+    )
 
 
 if assigned_author_trigger in body:
