@@ -15,7 +15,7 @@ jobs:
     steps:
       - run: cat "$GITHUB_EVENT_PATH"
 
-      - uses: samuelcolvin/label-and-assign@v0.3
+      - uses: samuelcolvin/label-and-assign@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           reviewers: samuelcolvin
