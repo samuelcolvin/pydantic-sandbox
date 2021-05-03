@@ -3,6 +3,8 @@ name: Label & Assign
 on:
   issue_comment:
     types: [created, edited]
+  pull_request_review:
+    types: [submitted, edited]
 
 permissions:
   pull-requests: write
@@ -11,6 +13,8 @@ jobs:
   label-and-assign:
     runs-on: ubuntu-latest
     steps:
+      - run: cat "$GITHUB_EVENT_PATH"
+
       - uses: samuelcolvin/label-and-assign@v0.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
