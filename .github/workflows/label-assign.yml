@@ -1,0 +1,17 @@
+name: Label & Assign
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  label-and-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: samuelcolvin/label-and-assign@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: samuelcolvin
