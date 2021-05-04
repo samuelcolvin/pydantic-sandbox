@@ -15,7 +15,8 @@ jobs:
     steps:
       - run: cat "$GITHUB_EVENT_PATH"
 
-      - uses: docker://samuelcolvin/label-and-assign:v1
+#      - uses: docker://samuelcolvin/label-and-assign:latest
+      - uses: samuelcolvin/label-and-assign@add-reaction
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           reviewers: samuelcolvin
