@@ -70,3 +70,18 @@ body:
       render: Text
     validations:
       required: true
+
+  - type: checkboxes
+    id: affected-components
+    attributes:
+      label: Affected Components
+      description: Which of the following parts of pydantic does this bug affect?
+      options:
+        - label: Data validation/parsing
+        - label: Data serialization (e.g. `.dict()`)
+        - label: JSON Schema
+        - label: Dataclasses
+        - label: Field Types (e.g. adding or changing a particular data type)
+        - label: Settings Management
+        - label: Plugins and integration with other tools (mypy, FastAPI, python-devtools, Hypothesis, VS Code, PyCharm, etc.)
+

@@ -34,3 +34,18 @@ body:
         * Why the feature should be added to pydantic (as opposed to another library or just implemented in your code)
     validations:
       required: true
+
+  - type: checkboxes
+    id: affected-components
+    attributes:
+      label: Affected Components
+      description: Which of the following parts of pydantic does this feature affect?
+      options:
+        - label: Data validation/parsing
+        - label: Data serialization (e.g. `.dict()`)
+        - label: JSON Schema
+        - label: Dataclasses
+        - label: Field Types (e.g. adding or changing a particular data type)
+        - label: Settings Management
+        - label: Plugins and integration with other tools (mypy, FastAPI, python-devtools, Hypothesis, VS Code, PyCharm, etc.)
+
