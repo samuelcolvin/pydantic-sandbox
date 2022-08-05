@@ -1,56 +1,33 @@
----
 name: 🚀 Feature request
-about: Suggest a new feature or change to pydantic
-title: '[FEATURE]: '
-labels: feature request
-issue_body: false
+description: Suggest a new feature or change to pydantic
+labels: [feature request]
 
 body:
-- type: input
-  attributes:
-    label: Discussion Thread
-    description: >
-      Before creating a feature request you (or someone else) must create a
-      [discussion thread](https://github.com/samuelcolvin/pydantic/discussions) in github discussions and see wider
-      support for the feature.
-  validations:
-    required: true
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in pydantic! 😎
 
-- type: dropdown
-  attributes:
-    label: After submitting this, I commit to do one of the following
-    options:
-      - Look through open issues/discussions and helped at least one other person
-      - Hit "watch" and help at least 2 people that ask questions in the future
-      - Implement a Pull Request for a confirmed bug
-  validations:
-    required: true
+        Please provide as much detail as possible about the feature you would like to suggest. 🙏
 
-- type: markdown
-  attributes:
-    label: "OS, Python & Pydantic Version"
-    description: >
-      Output of `python -c "import pydantic.utils; print(pydantic.utils.version_info())"`
-  validations:
-    required: true
+  - type: checkboxes
+    id: searched
+    attributes:
+      label: Initial Checks
+      description: |
+        Just a few checks to make sure you need to create a feature request.
+        
+        _Sorry to sound so draconian; but every second spend replying to issues is time not spent improving pydantic :-)_
+      options:
+        - label: I have searched Google & GitHub for similar requests and couldn't find anything
+          required: true
+        - label: I have read and followed [the docs](https://pydantic-docs.helpmanual.io) and still this feature is missing
+          required: true
 
-- type: markdown
-  attributes:
-    label: Description
-    description: Description of the feature you want (shorter the better)
-  validations:
-    required: true
-
-- type: markdown
-  attributes:
-    label: Self-Contained Code Snippet
-    description: Where possible please include a self-contained code snippet describing your feature request
-    value: |
-      ```py
-      import pydantic
-
-      ...
-      ```
-  validations:
-    required: false
-...
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please explain what you're seeing and what you would expect to see.
+    validations:
+      required: true
