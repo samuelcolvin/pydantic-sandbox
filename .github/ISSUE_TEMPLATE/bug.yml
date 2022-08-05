@@ -1,14 +1,11 @@
 name: 🐛 Bug
 description: Report a bug or unexpected behavior in pydantic
-labels: [bug]
+labels: [bug, unconfirmed]
 
 body:
   - type: markdown
     attributes:
-      value: |
-        Thanks for your interest in pydantic! 😎
-
-        Please provide as much detail as possible to make understanding and solving your problem as quick as possible. 🙏
+      value:  Thank you for contributing to pydantic! ✊
 
   - type: checkboxes
     id: searched
@@ -17,15 +14,15 @@ body:
       description: |
         Just a few checks to make sure you need to create a bug report.
         
-        _Sorry to sound so draconian; but every second spend replying to issues is time not spent improving pydantic :-)_
+        _Sorry to sound so draconian 👿; but every second spend replying to issues is time not spent improving pydantic_
       options:
         - label: I have searched Google, GitHub & StackOverflow for similar issues and couldn't find anything
           required: true
         - label: I have read and followed [the docs](https://pydantic-docs.helpmanual.io) and still think this is a bug
           required: true
         - label: >
-            The issue is definitely with pydantic 
-            (not another library in the ecosystem like [FastAPI](https://fastapi.tiangolo.com) or
+            I am confident that the issue is with pydantic 
+            (not my code, or another library in the ecosystem like [FastAPI](https://fastapi.tiangolo.com) or
             [mypy](https://mypy.readthedocs.io/en/stable))
           required: true
 
@@ -33,7 +30,10 @@ body:
     id: description
     attributes:
       label: Description
-      description: Please explain what you're seeing and what you would expect to see.
+      description: |
+        Please explain what you're seeing and what you would expect to see.
+
+        Please provide as much detail as possible to make understanding and solving your problem as quick as possible. 🙏
     validations:
       required: true
 

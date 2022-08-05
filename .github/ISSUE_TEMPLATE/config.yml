@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
   - name: 🤔 Ask a Question
-    url: https://github.com/samuelcolvin/pydantic/discussions
-    about: Use Pydantic's GitHub disussions to ask a question
+    url: 'https://github.com/samuelcolvin/pydantic/discussions/new?category=question'
+    about: Ask a question about how to use pydantic using github discussions
