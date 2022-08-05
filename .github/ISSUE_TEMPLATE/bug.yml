@@ -1,6 +1,7 @@
 name: 🐛 Bug
 description: Report a bug or unexpected behavior in pydantic
 labels: [bug]
+
 body:
   - type: markdown
     attributes:
@@ -61,13 +62,6 @@ body:
         ```bash
         python -c "import pydantic.utils; print(pydantic.utils.version_info())"
         ```
-      placeholder: |
-                pydantic version:
-               pydantic compiled:
-                    install path:
-                  python version:
-                        platform:
-        optional deps. installed:
 
       render: Text
     validations:
