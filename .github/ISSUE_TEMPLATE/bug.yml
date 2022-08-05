@@ -76,12 +76,16 @@ body:
     attributes:
       label: Affected Components
       description: Which of the following parts of pydantic does this bug affect?
+      # keep this lis in sync with feature_request.yml
       options:
-        - label: Data validation/parsing
-        - label: Data serialization (e.g. `.dict()`)
-        - label: JSON Schema
-        - label: Dataclasses
-        - label: Field Types (e.g. adding or changing a particular data type)
-        - label: Settings Management
-        - label: Plugins and integration with other tools (mypy, FastAPI, python-devtools, Hypothesis, VS Code, PyCharm, etc.)
-
+        - label: 'Data validation/parsing'
+        - label: '[Data serialization](https://pydantic-docs.helpmanual.io/usage/exporting_models/) - `.dict()` and `.json()`'
+        - label: '[JSON Schema](https://pydantic-docs.helpmanual.io/usage/schema/)'
+        - label: '[Dataclasses](https://pydantic-docs.helpmanual.io/usage/dataclasses/)'
+        - label: '[Model Config](https://pydantic-docs.helpmanual.io/usage/model_config/)'
+        - label: '[Field Types](https://pydantic-docs.helpmanual.io/usage/types/) - adding or changing a particular data type'
+        - label: '[Function validation decorator](https://pydantic-docs.helpmanual.io/usage/validation_decorator/)'
+        - label: '[Generic Models](https://pydantic-docs.helpmanual.io/usage/models/#generic-models)'
+        - label: 'Other Model behaviour - `construct()`, pickling, private attributes, ORM mode'
+        - label: '[Settings Management](https://pydantic-docs.helpmanual.io/usage/settings/)'
+        - label: 'Plugins and integration with other tools - mypy, FastAPI, python-devtools, Hypothesis, VS Code, PyCharm, etc.'
