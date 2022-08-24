@@ -108,12 +108,6 @@ jobs:
         id: check-tag
         run: ./tests/check_tag.py
 
-      - name: upload to pypi
-        run: twine upload dist/*
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.pypi_token }}
-
       - name: publish docs
         if: '!fromJSON(steps.check-tag.outputs.IS_PRERELEASE)'
         run: echo publishing
