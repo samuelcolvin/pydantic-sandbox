@@ -30,6 +30,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: "echo 'job:    ${{ toJSON(job) }}'"
+    - run: "echo 'github: ${{ toJSON(github) }}'"
+    - run: "echo 'env:    ${{ toJSON(env) }}'"
 
     - name: set up python
       uses: actions/setup-python@v2
@@ -97,6 +100,9 @@ jobs:
         with:
           python-version: '3.9'
 
+      - run: "echo 'job:    ${{ toJSON(job) }}'"
+      - run: "echo 'github: ${{ toJSON(github) }}'"
+      - run: "echo 'env:    ${{ toJSON(env) }}'"
       - name: publish docs
         if: >
           !(
