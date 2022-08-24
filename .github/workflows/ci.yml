@@ -115,4 +115,4 @@ jobs:
           endsWith(github.ref, 'b3') ||
           endsWith(github.ref, 'b4')
           )
-        run: echo "publishing
+        run: echo publishing
