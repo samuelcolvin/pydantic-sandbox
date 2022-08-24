@@ -83,3 +83,30 @@ jobs:
         with:
           name: coverage-html
           path: htmlcov
+
+  deploy:
+    name: Test Deploy
+    if: "success() && startsWith(github.ref, 'refs/tags/')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: publish docs
+        if: >
+          !(
+          endsWith(github.ref, 'a1') || 
+          endsWith(github.ref, 'a2') || 
+          endsWith(github.ref, 'a3') ||
+          endsWith(github.ref, 'a4') ||
+          endsWith(github.ref, 'b1') || 
+          endsWith(github.ref, 'b2') || 
+          endsWith(github.ref, 'b3') ||
+          endsWith(github.ref, 'b4')
+          )
+        run: echo "publishing
