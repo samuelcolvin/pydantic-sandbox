@@ -1,5 +1,5 @@
 
-print('this is a demo')
+print('this is a demo2')
 for i in range(10):
     print(i)
 
